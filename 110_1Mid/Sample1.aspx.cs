@@ -8,14 +8,25 @@ using System.Web.UI.WebControls;
 namespace _110_1Mid {
     public partial class Sample1 : System.Web.UI.Page {
         protected void Page_Load(object sender, EventArgs e) {
+            if (IsPostBack == false)
+            {
+                string s_Ver = mt_GenVeriStr();
+                mt_ImgPointer(ref Image1, s_Ver);
+                hd_Num.Value = mt_2MD5(s_Ver);
+            }
+
+
+
 
         }
 
         // To generate a 4 digital number
-        public string mt_GenVeriStr() {
+        public string mt_GenVeriStr()
+        {
             string s_Res = "";
             Random o_Ran = new Random();
-            for (int i_Ct = 0; i_Ct < 4; i_Ct++) {
+            for (int i_Ct = 0; i_Ct < 4; i_Ct++)
+            {
                 int i_Tmp = o_Ran.Next(0, 10);
                 s_Res = s_Res + i_Tmp.ToString();
             }
@@ -24,7 +35,8 @@ namespace _110_1Mid {
 
         // To pointer the url to the image object; the content of
         // the image is the 4 digital number above
-        public void mt_ImgPointer(ref Image o_Ig, string s_Str) {
+        public void mt_ImgPointer(ref Image o_Ig, string s_Str)
+        {
             System.Drawing.Font o_Font = new System.Drawing.Font("Times New Roman", 12.0f);
             System.Drawing.Image o_IS = new System.Drawing.Bitmap(30, 10);
             System.Drawing.Graphics o_Drawing = System.Drawing.Graphics.FromImage(o_IS);
@@ -47,7 +59,7 @@ namespace _110_1Mid {
             string s_Url = HttpContext.Current.Server.MapPath("~") + "Images/";
             string s_FileName = DateTime.Now.ToString("mmddyyyy_hhmmss") + ".png";
             string s_Path = s_Url + DateTime.Now.ToString("mmddyyyy_hhmmss") + ".png";
-            o_IS.Save(s_Path, System.Drawing.Imaging.ImageFormat.Png);
+
             o_Ig.ImageUrl = "~/Images/" + s_FileName;
 
             o_TextBrush.Dispose();
@@ -56,7 +68,8 @@ namespace _110_1Mid {
         }
 
         // To convert a plain-text string into a md5 string
-        public string mt_2MD5(string s_Str) {
+        public string mt_2MD5(string s_Str)
+        {
             System.Security.Cryptography.MD5 cryptoMD5 = System.Security.Cryptography.MD5.Create();
             byte[] ba_Bytes = System.Text.Encoding.UTF8.GetBytes(s_Str);
             byte[] ba_Hash = cryptoMD5.ComputeHash(ba_Bytes);
@@ -65,6 +78,11 @@ namespace _110_1Mid {
                 .Replace("-", String.Empty)
                 .ToUpper();
             return s_Md5;
+        }
+
+
+        protected void btn_Submit_Click(object sender, EventArgs e)
+        {
         }
     }
 }
